@@ -12,6 +12,7 @@ server.headersTimeout = 120 * 1000;
 
 app.get('/summoner/:name', async (req, res) => {
   const summonerName = req.params.name;
+  console.log(summonerName);
   try {
     console.log(summonerName);
     const response = await axios.get(`https://oc1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${API_KEY}`);

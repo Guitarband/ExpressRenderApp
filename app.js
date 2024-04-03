@@ -13,11 +13,17 @@ server.headersTimeout = 120 * 1000;
 app.get('/summoner/:name', async (req, res) => {
   const summonerName = req.params.name;
   try {
-    const response = await axios.get(`https://oc1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${summonerName}?api_key=${API_KEY}`);
+    const response = await axios.get(`https://oc1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${API_KEY}`);
     const summonerInfo = response.data;
     res.json(summonerInfo);
   } catch (error) {
-    res.status(404).json({ error: "Summoner not found" });
+    if (error.response && error.response.status === 404) {
+      console.log("Summoner not found:", error.response.data);
+      res.status(404).json({ error: "Summoner not found" });
+    } else {
+      console.error("Error occurred:", error.message);
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
 });
 

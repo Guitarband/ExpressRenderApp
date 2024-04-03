@@ -9,8 +9,9 @@ const server = app.listen(port, () => console.log(`Example app listening on port
 
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
-
+console.log("aaa")
 app.get('/summoner/:name', async (req, res) => {
+  console.log(req.params.name);
   const summonerName = req.params.name;
   console.log(req.params.name);
   try {

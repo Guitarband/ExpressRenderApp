@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
+const APIkey = process.env.RitoApi;
 
 app.get("/", (req, res) => res.type('html').send(html));
 
@@ -8,6 +9,17 @@ const server = app.listen(port, () => console.log(`Example app listening on port
 
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
+
+app.get('/summoner/:name', async (req, res) => {
+  const summonerName = req.params.name;
+  try {
+    const response = await axios.get(`https://oc1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${API_KEY}`);
+    const summonerInfo = response.data;
+    res.json(summonerInfo);
+  } catch (error) {
+    res.status(404).json({ error: "Summoner not found" });
+  }
+});
 
 const html = `
 <!DOCTYPE html>

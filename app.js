@@ -108,13 +108,6 @@ function makeRequest(options, callback) {
   request.end();
 }
 
-  request.on('error', (error) => {
-    callback(error);
-  });
-
-  request.end();
-}
-
 // Function to fetch summoner information
 function fetchSummonerInfo(summonerName, callback) {
   const options = {

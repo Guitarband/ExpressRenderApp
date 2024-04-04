@@ -1,5 +1,5 @@
 const express = require("express");
-const axios = require('axios');
+const https = require('https');
 const app = express();
 const port = process.env.PORT || 3001;
 const APIkey = process.env.RitoApi;
@@ -10,6 +10,17 @@ const html = `
 <html>
   <head>
     <title>Hello from Render!</title>
+    <script>
+      function displayError(message) {
+        console.error(message);
+        // Display error message in the browser console
+      }
+      
+      function displayMessage(message) {
+        console.log(message);
+        // Display general message in the browser console
+      }
+    </script>
   </head>
   <body>
     <section>
@@ -27,20 +38,29 @@ server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
 console.log("Server is running");
 
-app.get('/summoner/:name', async (req, res) => {
+app.get('/summoner/:name', (req, res) => {
   const summonerName = req.params.name;
-  try {
-    const response = await axios.get(`https://oc1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${APIkey}`);
-    const summonerInfo = response.data;
-    res.json(summonerInfo);
-  } catch (error) {
-    if (error.response && error.response.status === 404) {
-      console.log("Summoner not found:", error.response.data);
-      res.status(404).json({ error: "Summoner not found" });
-    } else {
-      displayError("aaaaaaaaaaaaaaaaaaaaaaaaa");
-      displayError(error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  }
+  const options = {
+    hostname: 'oc1.api.riotgames.com',
+    path: `/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${APIkey}`,
+    method: 'GET'
+  };
+
+  const request = https.request(options, (response) => {
+    let data = '';
+    response.on('data', (chunk) => {
+      data += chunk;
+    });
+    response.on('end', () => {
+      const summonerInfo = JSON.parse(data);
+      res.json(summonerInfo);
+    });
+  });
+
+  request.on('error', (error) => {
+    console.error("Error occurred:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  });
+
+  request.end();
 });

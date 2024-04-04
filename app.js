@@ -42,20 +42,14 @@ server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
 console.log("Server is running");
 
-const getPlayerCall = {
+app.get('/summoner/:name', (req, res) => {
+  const summonerName = req.params.name;
+  const getPlayerCall = {
     hostname: 'oc1.api.riotgames.com',
     path: `/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${APIkey}`,
     method: 'GET'
   };
-
-const getMasteryCall = {
-    hostname: 'oc1.api.riotgames.com',
-    path: `/lol/champion-mastery/v4/champion-masteries/by-puuid/${summonerPUUID}?api_key=${APIkey}`,
-    method: 'GET'
-  };
-
-app.get('/summoner/:name', (req, res) => {
-  const summonerName = req.params.name;
+  
   const userInfoRequest = https.request(getPlayerCall, (userInfoResponse) => {
     let data = '';
     userInfoResponse.on('data', (chunk) => {
@@ -74,6 +68,12 @@ app.get('/summoner/:name', (req, res) => {
     console.error("Error occurred:", error.message);
     res.status(500).json({ error: "Internal server error" });
   });
+
+  const getMasteryCall = {
+    hostname: 'oc1.api.riotgames.com',
+    path: `/lol/champion-mastery/v4/champion-masteries/by-puuid/${summonerPUUID}?api_key=${APIkey}`,
+    method: 'GET'
+  };
 
   const request = https.request(getPlayerCall, (response) => {
     let data = '';

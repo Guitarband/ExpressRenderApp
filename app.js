@@ -25,7 +25,7 @@ const mainHtml = `
   <body>
     <section>
       Hello from Render!
-      <input type:"text" id="username" value="Username onkeypress=enterCheck(key)">
+      <input type:"text" id="username" value="Username" onkeypress="enterCheck(key)">
     </section>
   </body>
 </html>

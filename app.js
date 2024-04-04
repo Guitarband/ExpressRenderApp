@@ -124,29 +124,25 @@ function fetchChampionMasteries(summonerPUUID, callback) {
   makeRequest(options, callback);
 }
 
-app.get('/summoner/:name', (req, res) => {
+app.get('/summoner/:name', async (req, res) => {
   const summonerName = req.params.name;
 
-  fetchSummonerInfo(summonerName, (error, summonerInfo) => {
-    if (error) {
-      console.error("Error occurred:", error.message);
-      return res.status(500).json({ error: "Internal server error" });
-    }
+  try {
+    // Fetch summoner information
+    const summonerInfo = await fetchSummonerInfo(summonerName);
 
-    summonerPUUID = summonerInfo.puuid;
-    username = summonerInfo.name;
-    accountLevel = summonerInfo.summonerLevel;
+    // Fetch champion masteries
+    const masteryInfo = await fetchChampionMasteries(summonerInfo.puuid);
 
-    fetchChampionMasteries(summonerPUUID, (error, masteryInfo) => {
-      if (error) {
-        console.error("Error occurred:", error.message);
-        return res.status(500).json({ error: "Internal server error" });
-      }
-      const playerData = {
-        summonerInfo: summonerInfo,
-        masteryInfo: masteryInfo
-      }
-      renderPlayerData(null, playerData)
-    });
-  });
+    // Render player data
+    const playerData = {
+      summonerInfo: summonerInfo,
+      masteryInfo: masteryInfo
+    };
+    renderPlayerData(null, playerData, res);
+  } catch (error) {
+    console.error("Error occurred:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
+

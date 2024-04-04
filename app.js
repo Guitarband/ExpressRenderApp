@@ -38,6 +38,39 @@ const mainHtml = `
 </html>
 `;
 
+function renderPlayerData(error, data) {
+  if (error) {
+      console.error("Error occurred:", error.message);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  else{
+    summonerInfo = data.summonerInfo;
+    const playerHtml = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>Player Information</title>
+    </head>
+    <body>
+        <h1>Player Information</h1>
+        <div>
+            <label for="username">Username:</label>
+            <span id="username"></span>
+        </div>
+        <div>
+            <label for="accountLevel">Account Level:</label>
+            <span id="accountLevel">${summonerInfo.name}</span>
+        </div>
+        <div>
+            <label for="profileImage">Profile Image:</label>
+            <img id="profileImage" src="" alt="Profile Image">
+        </div>
+    </body>
+    </html>
+    `;
+  }
+}
+
 let summonerPUUID = '';
 let username = '';
 let accountLevel = '';
@@ -109,10 +142,12 @@ app.get('/summoner/:name', (req, res) => {
         console.error("Error occurred:", error.message);
         return res.status(500).json({ error: "Internal server error" });
       }
-
-      // Filter the top 5 champion masteries
-      const top5Masteries = masteryInfo.slice(0, 5);
-      res.json(top5Masteries);
+      
+      const playerData = {
+        summonerInfo: summonerInfo,
+        masteryInfo: masteryinfo
+      }
+      renderPlayerData(null, playerData)
     });
   });
 });

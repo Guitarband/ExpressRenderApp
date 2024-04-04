@@ -75,17 +75,14 @@ app.get('/summoner/:name', (req, res) => {
     method: 'GET'
   };
 
-  const request = https.request(getPlayerCall, (response) => {
+  const request = https.request(getMasteryCall, (response) => {
     let data = '';
     response.on('data', (chunk) => {
       data += chunk;
     });
     response.on('end', () => {
-      const summonerInfo = JSON.parse(data);
-      summonerPUUID = summonerInfo.puuid;
-      username = summonerInfo.name;
-      accountLevel = summonerInfo.summonerLevel;
-      res.json(summonerInfo);
+      const masteryInfo = JSON.parse(data);
+      res.json(masteryInfo);
     });
   });
 

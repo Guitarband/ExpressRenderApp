@@ -42,56 +42,69 @@ server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
 console.log("Server is running");
 
-app.get('/summoner/:name', (req, res) => {
-  const summonerName = req.params.name;
-  const getPlayerCall = {
+// Function to make API call
+function makeRequest(options, callback) {
+  const request = https.request(options, (response) => {
+    let data = '';
+    response.on('data', (chunk) => {
+      data += chunk;
+    });
+    response.on('end', () => {
+      callback(null, JSON.parse(data));
+    });
+  });
+
+  request.on('error', (error) => {
+    callback(error);
+  });
+
+  request.end();
+}
+
+// Function to fetch summoner information
+function fetchSummonerInfo(summonerName, callback) {
+  const options = {
     hostname: 'oc1.api.riotgames.com',
     path: `/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${APIkey}`,
     method: 'GET'
   };
-  
-  const userInfoRequest = https.request(getPlayerCall, (userInfoResponse) => {
-    let data = '';
-    userInfoResponse.on('data', (chunk) => {
-      data += chunk;
-    });
-    userInfoResponse.on('end', () => {
-      const summonerInfo = JSON.parse(data);
-      summonerPUUID = summonerInfo.puuid;
-      username = summonerInfo.name;
-      accountLevel = summonerInfo.summonerLevel;
 
-      // Make the mastery request after summonerPUUID is set
-      const getMasteryCall = {
-        hostname: 'oc1.api.riotgames.com',
-        path: `/lol/champion-mastery/v4/champion-masteries/by-puuid/${summonerPUUID}?api_key=${APIkey}`,
-        method: 'GET'
-      };
+  makeRequest(options, callback);
+}
 
-      const request = https.request(getMasteryCall, (response) => {
-        let data = '';
-        response.on('data', (chunk) => {
-          data += chunk;
-        });
-        response.on('end', () => {
-          const masteryInfo = JSON.parse(data);
-          res.json(masteryInfo);
-        });
-      });
+// Function to fetch champion masteries
+function fetchChampionMasteries(summonerPUUID, callback) {
+  const options = {
+    hostname: 'oc1.api.riotgames.com',
+    path: `/lol/champion-mastery/v4/champion-masteries/by-puuid/${summonerPUUID}?api_key=${APIkey}`,
+    method: 'GET'
+  };
 
-      request.on('error', (error) => {
+  makeRequest(options, callback);
+}
+
+app.get('/summoner/:name', (req, res) => {
+  const summonerName = req.params.name;
+
+  fetchSummonerInfo(summonerName, (error, summonerInfo) => {
+    if (error) {
+      console.error("Error occurred:", error.message);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+
+    summonerPUUID = summonerInfo.puuid;
+    username = summonerInfo.name;
+    accountLevel = summonerInfo.summonerLevel;
+
+    fetchChampionMasteries(summonerPUUID, (error, masteryInfo) => {
+      if (error) {
         console.error("Error occurred:", error.message);
-        res.status(500).json({ error: "Internal server error" });
-      });
+        return res.status(500).json({ error: "Internal server error" });
+      }
 
-      request.end();
+      // Filter the top 5 champion masteries
+      const top5Masteries = masteryInfo.slice(0, 5);
+      res.json(top5Masteries);
     });
   });
-
-  userInfoRequest.on('error', (error) => {
-    console.error("Error occurred:", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  });
-
-  userInfoRequest.end();
 });

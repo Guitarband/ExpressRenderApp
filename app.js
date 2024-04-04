@@ -60,7 +60,31 @@ app.get('/summoner/:name', (req, res) => {
       summonerPUUID = summonerInfo.puuid;
       username = summonerInfo.name;
       accountLevel = summonerInfo.summonerLevel;
-      res.json(summonerInfo);
+
+      // Make the mastery request after summonerPUUID is set
+      const getMasteryCall = {
+        hostname: 'oc1.api.riotgames.com',
+        path: `/lol/champion-mastery/v4/champion-masteries/by-puuid/${summonerPUUID}?api_key=${APIkey}`,
+        method: 'GET'
+      };
+
+      const request = https.request(getMasteryCall, (response) => {
+        let data = '';
+        response.on('data', (chunk) => {
+          data += chunk;
+        });
+        response.on('end', () => {
+          const masteryInfo = JSON.parse(data);
+          res.json(masteryInfo);
+        });
+      });
+
+      request.on('error', (error) => {
+        console.error("Error occurred:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+      });
+
+      request.end();
     });
   });
 
@@ -69,27 +93,5 @@ app.get('/summoner/:name', (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   });
 
-  const getMasteryCall = {
-    hostname: 'oc1.api.riotgames.com',
-    path: `/lol/champion-mastery/v4/champion-masteries/by-puuid/${summonerPUUID}?api_key=${APIkey}`,
-    method: 'GET'
-  };
-
-  const request = https.request(getMasteryCall, (response) => {
-    let data = '';
-    response.on('data', (chunk) => {
-      data += chunk;
-    });
-    response.on('end', () => {
-      const masteryInfo = JSON.parse(data);
-      res.json(masteryInfo);
-    });
-  });
-
-  request.on('error', (error) => {
-    console.error("Error occurred:", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  });
-
-  request.end();
+  userInfoRequest.end();
 });

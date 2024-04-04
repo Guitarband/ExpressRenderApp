@@ -142,10 +142,9 @@ app.get('/summoner/:name', (req, res) => {
         console.error("Error occurred:", error.message);
         return res.status(500).json({ error: "Internal server error" });
       }
-      
       const playerData = {
         summonerInfo: summonerInfo,
-        masteryInfo: masteryinfo
+        masteryInfo: masteryInfo
       }
       renderPlayerData(null, playerData)
     });

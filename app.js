@@ -99,6 +99,19 @@ function makeRequest(options, callback) {
     callback(error);
   });
 
+  // Set timeout for the request (e.g., 10 seconds)
+  request.setTimeout(10000, () => {
+    request.abort(); // Abort the request if it takes longer than the specified timeout
+    callback(new Error('Request timed out'));
+  });
+
+  request.end();
+}
+
+  request.on('error', (error) => {
+    callback(error);
+  });
+
   request.end();
 }
 

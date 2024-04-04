@@ -24,7 +24,7 @@ const mainHtml = `
       function enterCheck(event) {
         if (event.key === "Enter") {
           const username = document.getElementById("username").value;
-          window.location.href = `/summoner/${username}`;
+          window.location.href = '/summoner/' + username;
         }
       }
     </script>

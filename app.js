@@ -38,7 +38,7 @@ app.get('/summoner/:name', async (req, res) => {
       console.log("Summoner not found:", error.response.data);
       res.status(404).json({ error: "Summoner not found" });
     } else {
-      console.error("Error occurred:", error.message);
+      displayError("aaaaaaaaaaaaaaaaaaaaaaaaa");
       res.status(500).json({ error: "Internal server error" });
     }
   }

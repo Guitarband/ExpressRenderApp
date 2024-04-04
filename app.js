@@ -5,7 +5,7 @@ const port = process.env.PORT || 3001;
 const APIkey = process.env.RitoApi;
 
 // Define HTML content
-const html = `
+const mainHtml = `
 <!DOCTYPE html>
 <html>
   <head>
@@ -25,10 +25,21 @@ const html = `
   <body>
     <section>
       Hello from Render!
+      <input type:"text" id="username" value="Username onkeypress=enterCheck(key)">
     </section>
   </body>
 </html>
 `;
+
+function enterCheck(key){
+  var e = key.code;
+  if(e == "Enter"){
+    username = document.getElementById("username").value;
+    app.get('*', function(req, res) {
+        res.redirect('/summoner/${username}');
+    });
+  }
+}
 
 let summonerPUUID = '';
 let username = '';

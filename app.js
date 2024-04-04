@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require('axios');
 const app = express();
 const port = process.env.PORT || 3001;
 const APIkey = process.env.RitoApi;
@@ -16,7 +17,7 @@ app.get('/summoner/:name', async (req, res) => {
   console.log(req.params.name);
   try {
     console.log(summonerName);
-    const response = await axios.get(`https://oc1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${API_KEY}`);
+    const response = await axios.get(`https://oc1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${APIkey}`);
     const summonerInfo = response.data;
     res.json(summonerInfo);
   } catch (error) {

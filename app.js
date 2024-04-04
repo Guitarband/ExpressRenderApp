@@ -20,26 +20,22 @@ const mainHtml = `
         console.log(message);
         // Display general message in the browser console
       }
+      function enterCheck(event){
+        if(event.key == "Enter"){
+          username = document.getElementById("username").value;
+          window.location.href = `/summoner/${username}`;
+        }
+      }
     </script>
   </head>
   <body>
     <section>
       Hello from Render!
-      <input type:"text" id="username" value="Username" onkeypress="enterCheck(key)">
+      <input type:"text" id="username" value="Username" onkeypress="enterCheck(event)">
     </section>
   </body>
 </html>
 `;
-
-function enterCheck(key){
-  var e = key.code;
-  if(e == "Enter"){
-    username = document.getElementById("username").value;
-    app.get('*', function(req, res) {
-        res.redirect('/summoner/${username}');
-    });
-  }
-}
 
 let summonerPUUID = '';
 let username = '';

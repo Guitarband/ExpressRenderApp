@@ -20,9 +20,10 @@ const mainHtml = `
         console.log(message);
         // Display general message in the browser console
       }
-      function enterCheck(event){
-        if(event.key == "Enter"){
-          username = document.getElementById("username").value;
+
+      function enterCheck(event) {
+        if (event.key === "Enter") {
+          const username = document.getElementById("username").value;
           window.location.href = `/summoner/${username}`;
         }
       }
@@ -31,7 +32,7 @@ const mainHtml = `
   <body>
     <section>
       Hello from Render!
-      <input type:"text" id="username" value="Username" onkeypress="enterCheck(event)">
+      <input type="text" id="username" value="Username" onkeypress="enterCheck(event)">
     </section>
   </body>
 </html>

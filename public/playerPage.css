@@ -1,25 +1,60 @@
 body {
+    font-family: Arial, sans-serif;
     background-color: #091428;
     color: #0397AB;
-    display: flex;
+    margin: 0;
+    padding: 0;
 }
 
-.AccountData {
-    position: absolute;
-    top: 20%;
-    left: 10%;
-    display: flex;
-    align-items: center;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-.profileImage {
-    margin-right: 10px;
+.Header {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.username {
-    margin: -5px 10px 0 0;
+.Header h1 {
+    font-size: 24px;
+    color: #0AC8B9;
 }
 
-.accountLevel {
-    margin: 5px 0 0 0;
+.Header input[type="text"] {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.Header button {
+    padding: 10px 20px;
+    background-color: #007acc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.Header button:hover {
+    background-color: #005f80;
+}
+
+.Summoner {
+    background-color: #091428;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ProfileIcon {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.SummonerName {
+    display: inline-block;
+    vertical-align: top;
 }

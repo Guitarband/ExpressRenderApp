@@ -7,21 +7,25 @@ const APIkey = "RGAPI-9fa86bfc-5f04-473d-b3fc-fefbc17f2462";
 // Define HTML content
 const mainHtml = `
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello from Render!</title>
-    <style>
-      body {
-        background-color: #0A1428;
-        color: #0397AB;
-      }
-    </style>
-  </head>
-  <body>
-    <section>
-      <input type="text" id="username" value="Username" onkeypress="enterCheck(event)">
-    </section>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summoner Stats</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Summoner Stats</h1>
+            <form id="summonerForm" method="get">
+                <input type="text" id="summonerSearch" name="summonerSearch" placeholder="Enter Summoner Name">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    <script src="/functions.js"></script>
+</body>
 </html>
 `;
 
@@ -33,17 +37,35 @@ function renderPlayerData(error, data, res) {
     else{
         const playerHtml = `
         <!DOCTYPE html>
-        <html>
+        <html lang="en">
         <head>
-            <title>Hello from Render!</title>
-            <link rel="stylesheet" type="text/css" href="/playerPage.css">
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Summoner Stats</title>
+            <link rel="stylesheet" href="/playerPage.css">
         </head>
         <body>
-          <section class="AccountData">
-            <img class="profileImage" src="https://ddragon.leagueoflegends.com/cdn/${data.gameVersion}/img/profileicon/${data.summonerInfo.profileIconId}.png" alt="Profile Icon" width="100" height="100">
-            <h1 class="username">${data.summonerInfo.name}</h1>
-            <p class="accountLevel">${data.summonerInfo.summonerLevel}</p>
-          </section>
+            <div class="Header">
+                <div class="SearchSummoner">
+                    <form id="summonerForm" method="get">
+                        <input type="text" id="summonerSearch" name="summonerSearch" placeholder="Enter Summoner Name">
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+                <div class="Summoner">
+                    <div class="SummonerHeader">
+                        <div class="ProfileIcon">
+                            <img src="https://ddragon.leagueoflegends.com/cdn/${data.gameVersion}/img/profileicon/${data.summonerInfo.profileIconId}.png" alt="Profile Icon" width="80" height="80">
+                        </div>
+                        <div class="SummonerName">
+                            <h1>${data.summonerInfo.name}</h1>
+                            <p>Level ${data.summonerInfo.summonerLevel}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="/functions.js"></script>
         </body>
         </html>
         `;

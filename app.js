@@ -1,8 +1,8 @@
 const express = require("express");
 const https = require('https');
 const app = express();
-const port = 3000;
-const APIkey = "RGAPI-9fa86bfc-5f04-473d-b3fc-fefbc17f2462";
+const port = process.env.PORT || 3001;
+const APIkey = process.env.RitoApi;
 
 // Define HTML content
 const mainHtml = `

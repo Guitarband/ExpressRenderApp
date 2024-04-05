@@ -1,0 +1,25 @@
+body {
+    background-color: #091428;
+    color: #0397AB;
+    display: flex;
+}
+
+.AccountData {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    display: flex;
+    align-items: center;
+}
+
+.profileImage {
+    margin-right: 10px;
+}
+
+.username {
+    margin: -5px 10px 0 0;
+}
+
+.accountLevel {
+    margin: 5px 0 0 0;
+}

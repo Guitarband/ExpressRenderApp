@@ -177,6 +177,7 @@ app.get('/summoner/:name', (req, res) => {
             masteryInfo: masteryInfo,
             gameVersion: gameVersion[0],
         };
+        console.log(playerData)
         renderPlayerData(null, playerData, res);
         });
     });
